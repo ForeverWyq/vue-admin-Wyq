@@ -89,14 +89,14 @@ export const constantRoutes = [
     // name: 'Nested',
     meta: {
       title: '系统配置',
-      icon: 'nested'
+      icon: 'system'
     },
     children: [
       {
         path: 'category',
         component: () => import('@/pages/manager/categoryList'), // Parent router-view
         // name: 'Menu1',
-        meta: { title: '栏目管理', icon:"form" },
+        meta: { title: '栏目管理', icon:"nested" },
       },
       {
         path: 'product',
