@@ -81,24 +81,20 @@ export default {
                 this.products = response.data;
             })
         },
-        // 录入栏目信息
-        toAddHandler(){
+        loadcategry(){
             let url = "http://localhost:6677/category/findAll"
             request.get(url).then((response)=>{
                 this.options = response.data;
             })
+        },
+        // 录入栏目信息
+        toAddHandler(){
             this.title="添加产品信息"
-            this.form={
-                type:"product"
-            }
+            this.form={}
             this.visible=true;
         },
         // 修改栏目信息
         toUpdateHandler(row){
-            let url = "http://localhost:6677/category/findAll"
-            request.get(url).then((response)=>{
-                this.options = response.data;
-            })
             this.title="修改产品信息"
             this.form=row;
             this.visible=true;
@@ -161,18 +157,15 @@ export default {
             visible:false,
             products:[],
             options: [],
-            form:{
-                type:"product"
-            }
+            form:{}
         }
     },
     created(){
         // vue实例创建完毕
-        let url = "http://localhost:6677/product/findAll"
-        request.get(url).then((response)=>{
-            // 将查询结果设置到products中,this指向外部函数的this
-            this.products = response.data;
-        })
+        // 读数据
+        this.loadData();
+        // 赋值
+        this.loadcategry();
     }
 }
 </script>

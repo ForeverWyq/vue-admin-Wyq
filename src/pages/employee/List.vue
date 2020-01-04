@@ -166,11 +166,7 @@ export default {
     },
     created(){
         // vue实例创建完毕
-        let url = "http://localhost:6677/waiter/findAll"
-        request.get(url).then((response)=>{
-            // 将查询结果设置到employees中,this指向外部函数的this
-            this.employees = response.data;
-        })
+        this.loadData();
     }
 }
 </script>

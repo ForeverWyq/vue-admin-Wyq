@@ -133,11 +133,7 @@ export default {
     },
     created(){
         // vue实例创建完毕
-        let url = "http://localhost:6677/order/findAll"
-        request.get(url).then((response)=>{
-            // 将查询结果设置到customers中,this指向外部函数的this
-            this.order = response.data;
-        })
+        this.loadData();
     }
 }
 </script>
