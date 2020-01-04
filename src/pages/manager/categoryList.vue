@@ -8,7 +8,7 @@
         <!-- 按钮结束 -->
         <br>
         <!-- 表格 -->
-        <el-table :data="customers">
+        <el-table :data="categorys">
             <el-table-column label="编号" prop="id" fixed="left"></el-table-column>
             <el-table-column label="栏目名称" prop="name" fixed="left"></el-table-column>
             <el-table-column label="序号" prop="num" fixed="left"></el-table-column>
@@ -61,7 +61,7 @@ export default {
         loadData(){
             let url = "http://localhost:6677/category/findAll"
             request.get(url).then((response)=>{
-                this.customers = response.data;
+                this.categorys = response.data;
             })
         },
         // 录入栏目信息
@@ -135,7 +135,7 @@ export default {
         return{
             title:"",
             visible:false,
-            customers:[],
+            categorys:[],
             form:{
                 type:"category"
             }
@@ -145,8 +145,8 @@ export default {
         // vue实例创建完毕
         let url = "http://localhost:6677/category/findAll"
         request.get(url).then((response)=>{
-            // 将查询结果设置到customers中,this指向外部函数的this
-            this.customers = response.data;
+            // 将查询结果设置到categorys中,this指向外部函数的this
+            this.categorys = response.data;
         })
     }
 }

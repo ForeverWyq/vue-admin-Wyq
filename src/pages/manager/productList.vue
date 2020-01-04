@@ -8,12 +8,12 @@
         <!-- 按钮结束 -->
         <br>
         <!-- 表格 -->
-        <el-table :data="customers">
+        <el-table :data="products">
             <el-table-column label="编号" prop="id" fixed="left"></el-table-column>
             <el-table-column label="产品名称" prop="name" fixed="left"></el-table-column>
             <el-table-column label="价格" prop="price" fixed="left"></el-table-column>
             <el-table-column label="描述" prop="description"></el-table-column>
-            <el-table-column label="所属产品" prop="categoryId"></el-table-column>
+            <el-table-column label="所属栏目" prop="categoryId"></el-table-column>
             <el-table-column label="操作" fixed="right">
                 <template v-slot="slot">
                     <a href="" @click.prevent="toDeleteHandler(slot.row.id)">
@@ -37,7 +37,7 @@
           :visible.sync="visible"
           width="60%">
             <el-form :model="form" label-width="80px">
-                <el-form-item label="名称">
+                <el-form-item label="产品名称">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="价格">
@@ -78,7 +78,7 @@ export default {
         loadData(){
             let url = "http://localhost:6677/product/findAll"
             request.get(url).then((response)=>{
-                this.customers = response.data;
+                this.products = response.data;
             })
         },
         // 录入栏目信息
@@ -159,7 +159,7 @@ export default {
         return{
             title:"",
             visible:false,
-            customers:[],
+            products:[],
             options: [],
             form:{
                 type:"product"
@@ -170,8 +170,8 @@ export default {
         // vue实例创建完毕
         let url = "http://localhost:6677/product/findAll"
         request.get(url).then((response)=>{
-            // 将查询结果设置到customers中,this指向外部函数的this
-            this.customers = response.data;
+            // 将查询结果设置到products中,this指向外部函数的this
+            this.products = response.data;
         })
     }
 }

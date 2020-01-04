@@ -135,7 +135,7 @@ export const constantRoutes = [
       {
         path: 'order',
         name: 'order-management',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/pages/order/List'),
         meta: { title: '订单管理', icon: 'link' }
       }
     ]

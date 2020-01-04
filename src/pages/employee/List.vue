@@ -8,7 +8,7 @@
         <!-- 按钮结束 -->
         <br>
         <!-- 表格 -->
-        <el-table :data="customers">
+        <el-table :data="employees">
             <el-table-column label="编号" prop="id" fixed="left"></el-table-column>
             <el-table-column label="用户名" prop="username" fixed="left"></el-table-column>
             <el-table-column label="姓名" prop="realname" fixed="left"></el-table-column>
@@ -84,7 +84,7 @@ export default {
         loadData(){
             let url = "http://localhost:6677/waiter/findAll"
             request.get(url).then((response)=>{
-                this.customers = response.data;
+                this.employees = response.data;
             })
         },
         // 录入员工信息
@@ -158,7 +158,7 @@ export default {
         return{
             title:"",
             visible:false,
-            customers:[],
+            employees:[],
             form:{
                 type:"waiter"
             }
@@ -168,8 +168,8 @@ export default {
         // vue实例创建完毕
         let url = "http://localhost:6677/waiter/findAll"
         request.get(url).then((response)=>{
-            // 将查询结果设置到customers中,this指向外部函数的this
-            this.customers = response.data;
+            // 将查询结果设置到employees中,this指向外部函数的this
+            this.employees = response.data;
         })
     }
 }
