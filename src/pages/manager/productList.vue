@@ -52,7 +52,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="介绍">
-                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6}"
+                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入内容" v-model="form.description">
                     </el-input>
                 </el-form-item>
