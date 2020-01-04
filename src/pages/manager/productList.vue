@@ -1,6 +1,6 @@
 <template>
     <div>
-        栏目管理
+        产品管理
         <br><br>
         <!-- 按钮 -->
         <el-button type="primary" size="small" @click="toAddHandler">添加</el-button>
