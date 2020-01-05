@@ -56,6 +56,17 @@
                     placeholder="请输入内容" v-model="form.description">
                     </el-input>
                 </el-form-item>
+                <el-form-item label="上传图片">
+                <el-upload
+                class="upload-demo"
+                action="http://134.175.154.93:6677/file/upload"
+                :on-success="uploadSuccessHandler"
+                :file-list="fileList"
+                list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button size="small"
@@ -74,6 +85,13 @@ import querystring from 'querystring'
 export default {
     // 用于存放网页中需要调用的方法
     methods:{
+        // 上传成功处理
+        uploadSuccessHandler(response){
+            let photo = "http://134.175.154.93:8888/group1/"
+            +response.data.id
+            // 将图片地址设置到form中，便于一起提交到后台
+            this.form.photo = photo;
+        },
         // 重载栏目数据
         loadData(){
             let url = "http://localhost:6677/product/findAll"
@@ -90,13 +108,15 @@ export default {
         // 录入栏目信息
         toAddHandler(){
             this.title="添加产品信息"
-            this.form={}
+            this.form={};
+            this.fileList=[];
             this.visible=true;
         },
         // 修改栏目信息
         toUpdateHandler(row){
             this.title="修改产品信息"
             this.form=row;
+            this.fileList=[];
             this.visible=true;
         },
         // 删除
@@ -157,7 +177,8 @@ export default {
             visible:false,
             products:[],
             options: [],
-            form:{}
+            form:{},
+            fileList:[]
         }
     },
     created(){
