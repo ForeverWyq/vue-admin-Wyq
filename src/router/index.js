@@ -6,6 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -96,7 +97,7 @@ export const constantRoutes = [
         path: 'category',
         component: () => import('@/pages/manager/categoryList'), // Parent router-view
         // name: 'Menu1',
-        meta: { title: '栏目管理', icon:"nested" },
+        meta: { title: '栏目管理', icon:"nested" }
       },
       {
         path: 'product',
@@ -153,6 +154,7 @@ export const constantRoutes = [
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
+  
 ]
 
 const createRouter = () => new Router({
