@@ -2,15 +2,20 @@
     <div>
         订单管理
         <br><br>
-        <!-- 按钮 -->
-        <el-button type="primary" size="small" @click="toAddHandler">添加</el-button>
-        <el-button type="danger" size="small">批量删除</el-button>
-        <br>
-        <!-- 按钮结束 -->
+        <!-- 选项卡 -->
+        <el-tabs v-model="params.status" @tab-click="loadData">
+            <el-tab-pane label="全部" name="全部"></el-tab-pane>
+            <el-tab-pane label="待派单" name="待派单"></el-tab-pane>
+            <el-tab-pane label="待接单" name="待接单"></el-tab-pane>
+            <el-tab-pane label="待服务" name="待服务"></el-tab-pane>
+            <el-tab-pane label="待确认" name="待确认"></el-tab-pane>
+            <el-tab-pane label="已完成" name="已完成"></el-tab-pane>
+        </el-tabs>
+        <!-- 选项卡结束 -->
         <!-- 表格 -->
         <el-table :data="orders.list">
             <el-table-column label="订单编号" prop="id"></el-table-column>
-            <el-table-column label="下单时间" prop="orderTime"></el-table-column>
+            <el-table-column label="下单时间" width="200" prop="orderTime"></el-table-column>
             <el-table-column label="总价" prop="total"></el-table-column>
             <el-table-column label="状态" prop="status"></el-table-column>
             <el-table-column label="顾客Id" prop="customerId"></el-table-column>
@@ -18,42 +23,35 @@
             <el-table-column label="地址Id" prop="addressId"></el-table-column>
             <el-table-column label="操作">
                 <template v-slot="slot">
-                    <a href="" @click.prevent="toDeleteHandler(slot.row.id)">
-                        <i class="el-icon-delete"></i></a>
-                    <a href="" @click.prevent="toUpdateHandler(slot.row)">
-                        <i class="el-icon-edit"></i></a>
+                    <a href="javascript:void(0)">详情</a>
+                    <a href="" v-if="slot.row.status==='待派单'" @click.prevent="toSendOrderHandler(slot.row)">派单</a>
                 </template>
             </el-table-column>
         </el-table>
         <!-- 表格结束 -->
         <!-- 分页 -->
         <el-pagination
-            layout="prev, pager, next"
-            :total="orders.total"
-            @current-change="pageChageHandler">
+        hide-on-single-page="true"
+        layout="prev, pager, next"
+        :total="orders.total"
+        @current-change="pageChageHandler">
         </el-pagination>
         <!-- 分页结束 -->
         <!-- 模态框 -->
-        <el-dialog
-          :title="title"
-          :visible.sync="visible"
-          width="60%">
-          <el-form :model="form" label-width="80px">
-                <el-form-item label="下单时间">
-                    <el-input v-model="form.orderTime"></el-input>
-                </el-form-item>
-                <el-form-item label="总价">
-                    <el-input  v-model="form.total"></el-input>
-                </el-form-item>
-                <el-form-item label="状态">
-                    <el-input v-model="form.status"></el-input>
-                </el-form-item>
-                <el-form-item label="顾客Id">
-                    <el-radio-group v-model="form.customerId">
-                        <el-input v-model="form.realname"></el-input>
-                    </el-radio-group>
-                </el-form-item>
-            </el-form>
+        <el-dialog title="派单" :visible.sync="visible" width="50%">
+            <div style="paddingLeft:2em">
+              <p> <strong>订单编号: </strong> {{form.id}} </p> <br>
+              <p> <strong>订单总价: </strong> {{form.total}} </p> <br>
+              <p> <strong>下单时间: </strong> {{form.orderTime}} </p> <br>
+              <p>
+                <strong>派送员工:</strong>
+                <el-select v-model="waiterId" placeholder="请选择">
+                    <el-option v-for="e in employees" :key="e.id"
+                    :label="e.realname" :value="e.id">
+                </el-option>
+                </el-select>
+              </p>
+            </div>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small"
                 @click="closeModalHandler">取 消</el-button>
@@ -71,8 +69,12 @@ import querystring from 'querystring'
 export default {
     // 用于存放网页中需要调用的方法
     methods:{
+        // 加载订单信息
         loadData(){
             let url = "http://localhost:6677/order/queryPage"
+            if(this.params.status ==="全部"){
+                delete this.params.status;
+            }
             request({
                 url,
                 method:"post",
@@ -81,77 +83,72 @@ export default {
                 },
                 data:querystring.stringify(this.params)
             }).then((response)=>{
+                // orders为一个对象，其中包含了分页信息，以及列表信息
                 this.orders=response.data
             })
         },
-        // 录入订单信息
-        toAddHandler(){
-            this.title="录入订单信息"
-            // 重置
-            this.form={
-                type:"order"
-            }
-            this.visible=true;
-        },
-        // 修改订单信息
-        toUpdateHandler(row){
-            // 模态框表单中显示当前行的信息
-            this.title="修改订单信息"
-            this.form=row;
-            this.visible=true;
-        },
-        // 删除
-        toDeleteHandler(id){
-            // 确认？
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-            }).then(() => {
-                // 调用后台接口完成删除操作
-                let url = "http://localhost:6677/order/deleteById?id="+id;
-                request.get(url).then((response)=>{
-                    // 刷新数据
-                    this.loadData();
-                    // 提示结果
-                    this.$message({    
-                        type: 'success',
-                       message: '删除成功!'
-                    });
-                })
-            })
-            
-        },
+        // 当分页中当前页改变时执行
         pageChageHandler(page){
             this.params.page=page-1;
             this.loadData();
         },
-        // 录入界面中点击确定调用的保存方法
-        submitHandler(){
-
+        // 派单
+        toSendOrderHandler(row){
+            // 模态框显示当前订单信息
+            this.form = row;
+            this.visible = true;
         },
         closeModalHandler(){
-            this.visible=false;
+            this.visible = false;
+        },
+        // 加载员工信息
+        loadEmployees(){
+            let url="http://localhost:6677/waiter/findAll";
+            request.get(url).then(response=>{
+                this.employees=response.data;
+            })
+        },
+        submitHandler(){
+            let url = "http://localhost:6677/order/sendOrder";
+            request({
+                url,
+                method:"GET",
+                params:{
+                orderId:this.form.id,
+                waiterId:this.waiterId
+                }
+            }).then((response)=>{
+                // 模态框关闭
+                this.closeModalHandler();
+                // 刷新
+                this.loadData();
+                // 提示消息
+                this.$message({
+                type:"success",
+                message:response.message
+                })
+            })
         }
     },
     //用于存放要向网页中显示的数据
     data(){
         return{
-            title:"",
             visible:false,
             orders:{},
-            form:{
-                type:"order"
-            },
+            form:{},    // 当前订单
             params:{
                 page:0,
                 pageSize:10
-            }
+            },
+            employee:[],
+            waiterId:null   // 选中的员工
         }
     },
     created(){
         // vue实例创建完毕
         this.loadData();
+        // 加载员工信息
+        this.loadEmployees();
     }
 }
 </script>
