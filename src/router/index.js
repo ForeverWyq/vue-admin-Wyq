@@ -103,31 +103,44 @@ export const constantRoutes = [
         path: 'product',
         component: () => import('@/pages/manager/productList'),
         meta: { title: '产品管理', icon:"form" }
+      },
+      {
+        path: 'address',
+        name: 'AddressList',
+        component: () => import('@/pages/address/List'),
+        // component: () => import('@/views/form/index'),
+        meta: { title: '地址管理', icon: 'link' }
+      },
+      {
+        path: 'comment',
+        name: 'CommentList',
+        component: () => import('@/pages/comment/List'),
+        meta: { title: '评论管理', icon: 'dashboard' }
       }
     ]
   },
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '审核管理', icon: 'example' },
-    children: [
-      {
-        path: 'menu01',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '员工审核', icon: 'tree' }
-      },
-      {
-        path: 'menu02',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '提现审核', icon: 'table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: 'Example',
+  //   meta: { title: '审核管理', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'menu01',
+  //       name: 'Table',
+  //       component: () => import('@/views/table/index'),
+  //       meta: { title: '员工审核', icon: 'tree' }
+  //     },
+  //     {
+  //       path: 'menu02',
+  //       name: 'Tree',
+  //       component: () => import('@/views/tree/index'),
+  //       meta: { title: '提现审核', icon: 'table' }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/order-management',

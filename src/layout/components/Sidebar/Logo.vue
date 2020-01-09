@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '家政服务预约云平台',
+      title: '好吃么订餐云平台',
       logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
     }
   }
